@@ -4,7 +4,7 @@ import sys
 
 def read_dataset():
     """
-    Reads the dataset with the raw data.
+    Reads the dataset with the cleaned data.
     """
     if len(sys.argv) != 1:
         print("\033[1m\033[91mError. histogram_mean.py does not take any argument.\n\033[0m")
