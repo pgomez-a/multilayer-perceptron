@@ -34,6 +34,6 @@ if __name__ == '__main__':
     dataset_columns += get_columns('std', columns)
     dataset_columns += get_columns('worst', columns)
     dataset.columns = dataset_columns
-    dataset.to_csv('../datasets/dataset_clean.csv')
+    dataset.to_csv('../datasets/dataset_clean.csv', index = False)
     print("\033[1mDone! dataset_clean.csv has been created and saved.\n\033[0m")
     sys.exit(0)
