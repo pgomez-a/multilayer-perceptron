@@ -29,7 +29,7 @@ if __name__ == '__main__':
         axis[y_pos, x_pos].hist(benign, alpha = 0.75, color = 'cornflowerblue', label = 'benign')
         axis[y_pos, x_pos].hist(malign, alpha = 0.75, color = 'firebrick', label = 'malignant')
         axis[y_pos, x_pos].set_xlabel(label)
-        axis[y_pos, x_pos].grid()
+        axis[y_pos, x_pos].grid(alpha = 0.75)
         x_pos += 1
         if x_pos == 5:
             y_pos += 1
