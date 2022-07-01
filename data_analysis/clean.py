@@ -1,7 +1,7 @@
 import pandas as pd
 import sys
 
-def read_csv():
+def read_dataset():
     """
     Reads the dataset with the raw data.
     """
@@ -25,7 +25,7 @@ def get_columns(prefix, column):
     return output
 
 if __name__ == '__main__':
-    raw_dataset = read_csv()
+    raw_dataset = read_dataset()
     dataset = pd.DataFrame(raw_dataset.iloc[:, 1:], dtype = object)
     columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness']
     columns += ['compactness', 'concavity', 'concave points', 'symmetry', 'fractal dimension']
