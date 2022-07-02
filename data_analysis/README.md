@@ -32,7 +32,7 @@ Following this description, the **clean.py** script is responsible for creating 
     python clean.py
     
 <div align="center">
-<img width=330 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000188-35ab107b-684a-4482-838d-b951c407a009.gif">
+<img href="https://ftp.cs.wisc.edu/math-prog/cpo-dataset/machine-learn/cancer/cancer_images/" width=330 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000188-35ab107b-684a-4482-838d-b951c407a009.gif">
 <img width=330 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000273-dc005458-aa74-4ba3-88d1-37154a08ae7c.gif">
 <img width=330 alt="malignant" src="https://user-images.githubusercontent.com/74931024/177000299-480df067-4238-4971-bb30-4ccb939e105f.gif">
 </div>
