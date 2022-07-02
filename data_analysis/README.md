@@ -26,3 +26,7 @@ Once we understand this, we can format our **dataset_raw.csv to dataset_clean.cs
   - Fractal dimension - "coastline aproximation" - 1
 - **Measures:** the mean, standard error, and "worst" (mean of the three largest values) of these features were computed for each image, resulting in 30 features.
 - **Class distribution:** 357 bening, 212 malignant.
+
+Following this description, the **clean.py** script is responsible for creating the **dataset_clean.py** file, which is stored in **[/datasets/](https://github.com/pgomez-a/multilayer-perceptron/tree/main/datasets)**. This csv file is a dataset that identifies each column with a meaningful name and removes the ID number feature, as we are onnly interested in analyzing the features of cell nuclei. This dataset will be the one we will use from now on to complete our project.
+
+    python clean.py
