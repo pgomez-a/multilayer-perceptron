@@ -5,3 +5,24 @@ Before implementing our **Machine Learning** model, we must first understand the
 If we read **dataset_raw.csv**, we see that this file contains a lot of numbers that don't seem to make sense. So our first task is to give this raw data a format that helps us understand the available data. This process is called data cleaning. It consists of reading the **dataset_info.txt** file to understand what each row and each column represents.<br>
 
 Once we understand this, we can format our **dataset_raw.csv to dataset_clean.csv**. In our case, this format has been given following the below information:
+- **Tittle:** [Wisconsin Diagnostic Breast Cancer (WDBC)](https://ftp.cs.wisc.edu/math-prog/cpo-dataset/machine-learn/cancer/WDBC/)
+- **Date:** November 1995
+- **Relevant Information:** features are computed from a digitized image of a fine needle aspirate (FNA) of a breast mass. They describe characteristics of the cell nuclei present in the image.
+- **Number of instances:** 569
+- **Number of attributes:** 32
+  - ID number
+  - Diagnosis (M = malignant, B = bening)
+  - 30 real-valued input features
+- **10 real-valued features:**
+  - Radius - mean of distances from center to points on the perimeter.
+  - Texture - standard deviation of gray-scale values.
+  - Perimeter
+  - Area
+  - Smoothness - local variation in radius lengths.
+  - Compactness - perimeter^2 / area - 1.0.
+  - Concavity - severity of concave portions of the contour.
+  - Concave points - number of concave portions of the contour.
+  - Symmetry
+  - Fractal dimension - "coastline aproximation" - 1
+- **Measures:** the mean, standard error, and "worst" (mean of the three largest values) of these features were computed for each image, resulting in 30 features.
+- **Class distribution:** 357 bening, 212 malignant.
