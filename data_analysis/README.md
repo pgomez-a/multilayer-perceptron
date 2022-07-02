@@ -49,11 +49,14 @@ For a better understanding of the data, another important step to take is to vis
     python histogram_mean.py
     
 This program does not take any parameters. Computes a histogram for each of the features related to the measure "mean":
+<img width="1468" alt="mean_hist" src="https://user-images.githubusercontent.com/74931024/177002300-346b0849-21cf-4cac-b54d-a1cb71af5eb2.png">
 
     python histogram_std.py
     
 This program does not take any parameters. Computes a histogram for each of the features related to the measure "std":
+<img width="1468" alt="std_hist" src="https://user-images.githubusercontent.com/74931024/177002316-1248e43b-b7b4-4d9e-9956-593e2cad40ba.png">
 
     python histogram_worst.py
     
 This program does not take any parameters. Computes a histogram for each of the features related to the measure "worst":
+<img width="1468" alt="worst_hist" src="https://user-images.githubusercontent.com/74931024/177002327-59a845ae-3531-484f-8fda-a0725e0ffd4a.png">
