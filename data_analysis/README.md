@@ -63,7 +63,7 @@ This program does not take any parameters. Computes a histogram for each of the 
 
     python scatter_plot.py <feature_x> <feature_y>
     
-This program takes two parameters. Compute a scatterplot for the two features given as parameters:
+This program takes two parameters. Computes a scatterplot for the two features given as parameters:
 <div align="center">
 <img width="500" alt="scatter_one" src="https://user-images.githubusercontent.com/74931024/177002601-ad00592f-a5af-4bea-8c1c-ea4b857c0821.png">
 <img width="500" alt="scatter_two" src="https://user-images.githubusercontent.com/74931024/177002616-70e82f81-34d3-480c-baaa-c47f7c43c9e3.png">
