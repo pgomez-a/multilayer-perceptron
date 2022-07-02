@@ -28,9 +28,9 @@ Once we understand this, we can format our **dataset_raw.csv to dataset_clean.cs
 - **Class distribution:** 357 bening, 212 malignant.
 
 <div align="center">
-<img width=300 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000188-35ab107b-684a-4482-838d-b951c407a009.gif">
-<img width=300 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000273-dc005458-aa74-4ba3-88d1-37154a08ae7c.gif">
-<img width=300 alt="malignant" src="https://user-images.githubusercontent.com/74931024/177000299-480df067-4238-4971-bb30-4ccb939e105f.gif">
+<img width=325 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000188-35ab107b-684a-4482-838d-b951c407a009.gif">
+<img width=325 alt="benign" src="https://user-images.githubusercontent.com/74931024/177000273-dc005458-aa74-4ba3-88d1-37154a08ae7c.gif">
+<img width=325 alt="malignant" src="https://user-images.githubusercontent.com/74931024/177000299-480df067-4238-4971-bb30-4ccb939e105f.gif">
 </div>
 
 Following this description, the **clean.py** script is responsible for creating the **dataset_clean.py** file, which is stored in **[/datasets/](https://github.com/pgomez-a/multilayer-perceptron/tree/main/datasets)**. This csv file is a dataset that identifies each column with a meaningful name and removes the ID number feature, as we are onnly interested in analyzing the features of cell nuclei. This dataset will be the one we will use from now on to complete our project.
