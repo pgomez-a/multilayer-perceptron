@@ -42,3 +42,18 @@ Following this description, the **clean.py** script is responsible for creating 
 <img width=330 alt="malignant" src="https://user-images.githubusercontent.com/74931024/177000299-480df067-4238-4971-bb30-4ccb939e105f.gif">
 </a>
 </div>
+
+### Data Visualization
+For a better understanding of the data, another important step to take is to visualize the data so that we can get an idea of the distribution of the data and the relationship between the features. To do this, we have four different scripts at our disposal:
+
+    python histogram_mean.py
+    
+This program does not take any parameters. Computes a histogram for each of the features related to the measure "mean":
+
+    python histogram_std.py
+    
+This program does not take any parameters. Computes a histogram for each of the features related to the measure "std":
+
+    python histogram_worst.py
+    
+This program does not take any parameters. Computes a histogram for each of the features related to the measure "worst":
