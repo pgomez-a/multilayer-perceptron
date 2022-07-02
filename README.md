@@ -15,7 +15,7 @@ With **Machine Learning**, medical professionals can quickly and accurately sort
 
 ### Objective
 To carry out this project, we are going to train an **artificial neural network** that will be able **to detect breast cancer.** The features of the dataset describe the characteristics of a breast mass cell nucleus extracted with fine-needle aspiration. In this way, we are going to go through two major stages to complete our project:
-- **Data Analysis**
+- **[Data Analysis](https://github.com/pgomez-a/multilayer-perceptron/tree/main/data_analysis)**
   - Data Cleaning
   - Data Visualization
 - **Model Implementation**
