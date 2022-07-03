@@ -20,6 +20,22 @@ class Perceptron(object):
         """
         return "Perceptron has {} dendrites with weights: {}".format(self.dendrites, self.weights)
 
+    def get_weights(self):
+        """
+        Returns the weights used to compute the tranfer and activation functions.
+        """
+        return self.weights
+
+    def set_weights(self, weights):
+        """
+        Sets the weights used to compute the tranfer and activation functions.
+        """
+        if not type(weights) == np.ndarray or weights.ndim != 1 or weights.size == 0:
+            raise Exception("weights must be a non-empty numpy ndarray of dimension 1.")
+        self.weights = weights
+        self.dendrites = weights.size
+        return
+
     def transfer(self, bias, inputs):
         """
         Computes multiple inputs so that the activation function can be applied.
