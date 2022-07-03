@@ -20,15 +20,17 @@ class Perceptron(object):
         """
         return "Perceptron has {} dendrites with weights: {}".format(self.dendrites, self.weights)
 
-    def transfer(self, inputs):
+    def transfer(self, bias, inputs):
         """
         Computes multiple inputs so that the activation function can be applied.
         """
+        if not type(bias) == int and not type(bias) == float:
+            raise Exception("bias argument must be a numerical value.")
         if not type(inputs) == np.ndarray or inputs.ndim != 1 or inputs.size == 0:
             raise Exception("inputs must be a non-empty numpy ndarray of dimension 1.")
         if inputs.size != self.weights.size:
             raise Exception("inputs({}) must be the same size as weights({}).".format(inputs.size, self.weights.size))
-        return np.dot(inputs, self.weights)
+        return np.dot(inputs, self.weights) + bias
 
     def linear_act(self, value):
         """
