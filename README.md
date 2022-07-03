@@ -6,6 +6,8 @@
 
 With this project we are going to implement a **multilayer perceptron**, in order to predict whether a cancer is malignant or benign on a dataset of breast cancer diagnosis in the Wisconsin. The goal of this project is to give us a first approach to **artificial neural networks**, and to made us implement the algorithms at the heart of the training process.
 
+<img align="right" alt="breast cancer" src="https://user-images.githubusercontent.com/74931024/177033104-c876fd69-af55-453d-9ea8-950c2317f29a.png">
+
 ### Introduction
 **Breast cancer** is cancer that develops from **breast tissue**, most commonly in the cells that line the milk ducts of the breast. Breast cancer happens when abnormal cells in the breast begin to grow and divide in an uncontrolled way and eventually form a tumour. It mainly affects women, but men can get it too.<br>
 
