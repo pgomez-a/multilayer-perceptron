@@ -16,7 +16,7 @@ class Perceptron(object):
 
     def __str__(self):
         """
-        Describres the structure of the perceptron.
+        Describes the structure of the perceptron.
         """
         return "Perceptron has {} dendrites with weights: {}".format(self.dendrites, self.weights)
 
