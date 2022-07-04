@@ -16,7 +16,7 @@ Around **70%** of breast cancers have no special features when the cells are loo
 With **Machine Learning**, medical professionals can quickly and accurately sort through breast MRIs in patients with dense breast tissue to eliminate those without cancer. **Supplemental screening in women with dense breast tissue increased the sensitivity of cancer detection.**
 
 ### Objective
-To carry out this project, we are going to train an **artificial neural network** that will be able **to detect breast cancer.** The features of the dataset describe the characteristics of a breast mass cell nucleus extracted with fine-needle aspiration. In this way, we are going to go through two major stages to complete our project:
+To carry out this project, we are going to train an **[artificial neural network](https://github.com/pgomez-a/multilayer-perceptron/tree/main/lab)** that will be able **to detect breast cancer.** The features of the dataset describe the characteristics of a breast mass cell nucleus extracted with fine-needle aspiration. In this way, we are going to go through two major stages to complete our project:
 - **[Data Analysis](https://github.com/pgomez-a/multilayer-perceptron/tree/main/data_analysis)**
   - Data Cleaning
   - Data Visualization
