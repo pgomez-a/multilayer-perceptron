@@ -32,3 +32,24 @@ class MultilayerPerceptron(object):
             for neuron in layer.get_perceptrons():
                 msg += "\t\tPerceptron has {} dendrites with weights: {}\n".format(neuron.get_dendrites(), neuron.get_weights())
         return msg
+
+    def get_size(self):
+        """
+        Returns the number of layers of the multilayer-perceptron model.
+        """
+        return self.__size
+
+    def get_layers(self):
+        """
+        Returns the layers of the multilayer-perceptron model.
+        """
+        return self.__layers
+
+    def feed_forward(self, inputs):
+        """
+        Performs a feed forward operation with the stored weights.
+        """
+        inputs = np.insert(inputs, 0, 1)
+        for layer in self.__layers:
+            inputs = layer.feed_forward(inputs)
+        return inputs[1:]
