@@ -44,7 +44,7 @@ class Perceptron(object):
             raise Exception("inputs must be a non-empty numpy ndarray of dimension 1.")
         if inputs.size != self.weights.size:
             raise Exception("inputs({}) must be the same size as weights({}).".format(inputs.size, self.weights.size))
-        return np.dot(inputs, self.weights)
+        return float(np.dot(inputs, self.weights))
 
     def linear_act(self, value):
         """
