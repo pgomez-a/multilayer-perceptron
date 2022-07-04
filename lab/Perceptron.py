@@ -10,21 +10,27 @@ class Perceptron(object):
         """
         if not type(weights) == np.ndarray or weights.ndim != 1 or weights.size == 0:
             raise Exception("weights must be a non-empty numpy ndarray of dimension 1.")
-        self.weights = weights
-        self.dendrites = weights.size
+        self.__weights = weights
+        self.__dendrites = weights.size
         return
 
     def __str__(self):
         """
         Describes the structure of the perceptron.
         """
-        return "Perceptron has {} dendrites with weights: {}".format(self.dendrites, self.weights)
+        return "Perceptron has {} dendrites with weights: {}".format(self.__dendrites, self.__weights)
+
+    def get_dendrites(self):
+        """
+        Returns the number of dendrites of the perceptron.
+        """
+        return self.__dendrites
 
     def get_weights(self):
         """
         Returns the weights used to compute the tranfer and activation functions.
         """
-        return self.weights
+        return self.__weights
 
     def set_weights(self, weights):
         """
@@ -32,8 +38,8 @@ class Perceptron(object):
         """
         if not type(weights) == np.ndarray or weights.ndim != 1 or weights.size == 0:
             raise Exception("weights must be a non-empty numpy ndarray of dimension 1.")
-        self.weights = weights
-        self.dendrites = weights.size
+        self.__weights = weights
+        self.__dendrites = weights.size
         return
 
     def transfer(self, inputs):
@@ -42,9 +48,9 @@ class Perceptron(object):
         """
         if not type(inputs) == np.ndarray or inputs.ndim != 1 or inputs.size == 0:
             raise Exception("inputs must be a non-empty numpy ndarray of dimension 1.")
-        if inputs.size != self.weights.size:
-            raise Exception("inputs({}) must be the same size as weights({}).".format(inputs.size, self.weights.size))
-        return float(np.dot(inputs, self.weights))
+        if inputs.size != self.__dendrites:
+            raise Exception("inputs({}) must be the same size as weights({}).".format(inputs.size, self.__dendrites))
+        return float(np.dot(inputs, self.__weights))
 
     def linear_act(self, value):
         """
