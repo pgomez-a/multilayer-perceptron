@@ -32,13 +32,3 @@ class HiddenLayerPerceptron(LayerPerceptron):
             activation = self.perceptrons[pos].activation(transfer)
             output[pos + 1] = activation
         return output
-
-weights = np.random.rand(4, 2)
-hidden = HiddenLayerPerceptron(4, 2, weights)
-print(hidden)
-for neuron in hidden.perceptrons:
-    print(neuron)
-print()
-
-inputs = np.random.rand(2)
-print(hidden.feed_forward(inputs))
