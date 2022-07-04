@@ -49,7 +49,7 @@ class LayerPerceptron(object):
         """
         Performs a feed forward operation with the stored weights.
         """
-        if inputs.ndim != 1 or inputs.size != self.__dendrites:
+        if not type(inputs) == np.ndarray or inputs.ndim != 1 or inputs.size != self.__dendrites:
             raise Exception("inputs argument must be a numpy ndarray of dimension 1 with size {}.".format(self.__dendrites))
         output = np.zeros(self.__neurons + 1)
         output[0] = 1.0
