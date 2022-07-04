@@ -5,22 +5,16 @@ class LayerPerceptron(object):
     """
     Simple layer perceptron architecture of a multilayer-perceptron.
     """
-    def __init__(self, size, dendrites, weights):
+    def __init__(self, weights):
         """
         Initializes a layer of a multilayer-perceptron model.
         """
-        if not type(size) == int or size <= 0:
-            raise Exception("size argument must be a positive integer value.")
-        if not type(dendrites) == int or dendrites <= 0:
-            raise Exception("dendrites argument must be a positive integer value.")
-        if not type(weights) == np.ndarray or weights.size == 0:
-            raise Exception("weights must be a non-empty numpy ndarray.")
-        if weights.ndim != 2 or size != weights.shape[0] or dendrites != weights.shape[1]:
-            raise Exception("weights{} must be of dimension ({},{}).".format(weights.shape, size, dendrites))
-        self.size = size
-        self.dendrites = dendrites
-        self.perceptrons = np.zeros(size, dtype = object)
-        for pos in range(size):
+        if not type(weights) == np.ndarray or weights.size == 0 or weights.ndim != 2:
+            raise Exception("weights must be a non-empty numpy ndarray of dimension 2.")
+        self.size = weights.shape[0]
+        self.dendrites = weights.shape[1]
+        self.perceptrons = np.zeros(self.size, dtype = object)
+        for pos in range(self.size):
             self.perceptrons[pos] = Perceptron(weights[pos])
         return
 

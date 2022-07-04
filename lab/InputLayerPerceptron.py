@@ -10,7 +10,9 @@ class InputLayerPerceptron(LayerPerceptron):
         """
         Initializes an input layer of a multilayer-perceptron model.
         """
-        super().__init__(size, 1, np.ones((size, 1)))
+        if not type(size) == int or size <= 0:
+            raise Exception("size argument must be a positive integer value.")
+        super().__init__(np.ones((size, 1)))
         return
 
     def __str__(self):

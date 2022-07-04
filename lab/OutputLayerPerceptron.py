@@ -6,11 +6,11 @@ class OutputLayerPerceptron(LayerPerceptron):
     """
     Output layer perceptron architecture of a multilayer-perceptron.
     """
-    def __init__(self, size, dendrites, weights):
+    def __init__(self, weights):
         """
         Initializes an output layer of a multilayer-perceptron model.
         """
-        super().__init__(size, dendrites, weights)
+        super().__init__(weights)
         return
 
     def __str__(self):
