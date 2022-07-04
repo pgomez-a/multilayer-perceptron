@@ -11,7 +11,7 @@ Its main function is to replicate the behavior of a **biological neuron.** Broad
 - **Axons:** where electrical impulses from the neuron travel away to be received by other neurons.
 
 Now that we understand how a biological neuron works, we can find its similarities to an artificial neuron:
-- **Input ~ Dendrites**
+- **Inputs ~ Dendrites**
 - **Weights ~ Synapse**
 - **Soma ~ Node**
 - **Output ~ Axon**
