@@ -20,6 +20,6 @@ Now that we understand how a biological neuron works, we can find its similariti
 - **Output ~ Axon**
 
 <div align="center">
-<img width=500 alt="biological neuron" src="https://user-images.githubusercontent.com/74931024/177190004-06cefb93-511e-425d-b5a5-4d1b5afceaca.jpg">
 <img width=500 alt="artificial neuron" src="https://user-images.githubusercontent.com/74931024/177190161-47bec551-5910-40d0-9a39-6b94380da046.png">
+<img width=500 alt="biological neuron" src="https://user-images.githubusercontent.com/74931024/177190004-06cefb93-511e-425d-b5a5-4d1b5afceaca.jpg">
 </div>
