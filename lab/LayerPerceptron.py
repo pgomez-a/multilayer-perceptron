@@ -11,10 +11,10 @@ class LayerPerceptron(object):
         """
         if not type(weights) == np.ndarray or weights.size == 0 or weights.ndim != 2:
             raise Exception("weights must be a non-empty numpy ndarray of dimension 2.")
-        self.size = weights.shape[0]
+        self.neurons = weights.shape[0]
         self.dendrites = weights.shape[1]
-        self.perceptrons = np.zeros(self.size, dtype = object)
-        for pos in range(self.size):
+        self.perceptrons = np.zeros(self.neurons, dtype = object)
+        for pos in range(self.neurons):
             self.perceptrons[pos] = Perceptron(weights[pos])
         return
 
@@ -22,12 +22,18 @@ class LayerPerceptron(object):
         """
         Describes the structure of the layer.
         """
-        return "Layer Perceptron has {} neurons with {} dendrites.".format(self.size, self.dendrites)
+        return "Layer Perceptron has {} neurons with {} dendrites.".format(self.neurons, self.dendrites)
 
     def feed_forward(self, inputs):
         """
         Performs a feed forward operation with the stored weights.
         """
-        print("This is a general Layer Perceptron Arhitecture.")
-        print("You have to determine the type of the layer if you want to perform feed forward.")
-        return
+        if inputs.ndim != 1 or inputs.size != self.dendrites:
+            raise Exception("inputs argument must be a numpy ndarray of dimension 1 with size {}.".format(self.dendrites))
+        output = np.zeros(self.neurons + 1)
+        output[0] = 1.0
+        for pos in range(self.neurons):
+            transfer = self.perceptrons[pos].transfer(inputs)
+            activation = self.perceptrons[pos].activation(transfer)
+            output[pos + 1] = activation
+        return output
