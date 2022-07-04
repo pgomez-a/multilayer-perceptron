@@ -22,7 +22,7 @@ class LayerPerceptron(object):
         """
         Describes the structure of the layer.
         """
-        msg = "Layer Perceptron has {} neurons with {} dendrites:\n".format(self.__neurons, self.__dendrites)
+        msg = "Layer Perceptron has {} neurons where:\n".format(self.__neurons)
         for neuron in self.__perceptrons:
             msg += "\tPerceptron has {} dendrites with weights: {}\n".format(neuron.get_dendrites(), neuron.get_weights())
         return msg
@@ -38,6 +38,12 @@ class LayerPerceptron(object):
         Returns the number of dendrites of the perceptron of the layer.
         """
         return self.__dendrites
+
+    def get_perceptrons(self):
+        """
+        Returns the perceptrons of the layer.
+        """
+        return self.__perceptrons
 
     def feed_forward(self, inputs):
         """
