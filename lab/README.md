@@ -20,3 +20,10 @@ Now that we understand how a biological neuron works, we can find its similariti
 <img width=500 alt="artificial neuron" src="https://user-images.githubusercontent.com/74931024/177190161-47bec551-5910-40d0-9a39-6b94380da046.png">
 <img width=500 alt="biological neuron" src="https://user-images.githubusercontent.com/74931024/177190004-06cefb93-511e-425d-b5a5-4d1b5afceaca.jpg">
 </div>
+
+### Multilayer perceptron
+**The multilayer perceptron is a feedforward network.** This means that the data flows from the input layer to the output layer. A multilayer perceptron is defined by the presence of one or more hidden layers as well as an interconnection of all the neurons of one layer to the next.
+
+<div align="center">
+<img width="821" alt="multilayer_perceptron" src="https://user-images.githubusercontent.com/74931024/177191563-1bf80e4f-438f-46e3-a504-dc3e7fb31e81.png">
+</div>
