@@ -14,6 +14,7 @@ def read_dataset():
         print("\033[1m\033[91mError: read_dataset. evaluate_network.py takes two arguments.\n\033[0m")
         sys.exit(1)
     try:
+        print("\033[1mReading dataset...\033[0m")
         dataset = pd.read_csv(sys.argv[1])
     except:
         print("\033[1m\033[91mError: read_dataset. {} can't be read.\n\033[0m".format(sys.argv[1]))
@@ -26,6 +27,7 @@ def get_weights():
     """
     try:
         with open(sys.argv[2], 'r') as f:
+            print("\033[1mReading weights...\033[0m")
             weights = list()
             layers = int(f.readline())
             for layer in range(layers):
@@ -39,8 +41,39 @@ def get_weights():
         sys.exit(1)
     return weights
 
+def predict(X, multilayer, true_val, neg_val):
+    """
+    Performs a prediction for each of the given inputs.
+    """
+    print("\033[1mComputing predictions...\033[0m")
+    Y_hat = np.zeros(X.shape[0], dtype = object)
+    for pos in range(X.shape[0]):
+        val = multilayer.feed_forward(X[pos])
+        if val >= 0.5:
+            Y_hat[pos] = true_val
+        else:
+            Y_hat[pos] = neg_val
+    return Y_hat
+
+def cost(Y, Y_hat, true_val, neg_val):
+    """
+    Performs a binary cross-entropy error function to evaluate the accuracy of the model.
+    """
+    Y[Y == true_val] = 1.0
+    Y[Y == neg_val] = 0.0
+    Y_hat[Y_hat == true_val] = 1.0 - 1e-15
+    Y_hat[Y_hat == neg_val] = 0.0 + 1e-15
+    Y_hat = Y_hat.astype(float)
+    error = -sum(Y * np.log(Y_hat) + (1 - Y) * np.log(1 - Y_hat)) / Y.shape[0]
+    print("\033[1m\nBinary cross-entropy error value is: {}.\n\033[0m".format(error))
+    return
+
 if __name__ == '__main__':
     dataset = read_dataset()
     weights = get_weights()
     multilayer = MultilayerPerceptron(dataset.shape[1] - 1, weights)
+    Y = dataset.iloc[:, 0].to_numpy()
+    X = dataset.iloc[:, 1:].to_numpy()
+    Y_hat = predict(X, multilayer, true_val = 'M', neg_val = 'B')
+    cost(Y, Y_hat, true_val = 'M', neg_val = 'B')
     sys.exit(0)
