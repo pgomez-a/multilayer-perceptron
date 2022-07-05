@@ -59,7 +59,11 @@ class MultilayerPerceptron(object):
         """
         Performs a feed forward operation with the stored weights.
         """
-        inputs = np.insert(inputs, 0, 1)
-        for layer in self.__layers:
-            inputs = layer.feed_forward(inputs)
+        for layer_pos in range(self.__size):
+            if layer_pos == 0:
+                for input_pos in range(inputs.size):
+                    inputs[input_pos] = self.__layers[layer_pos].feed_forward(np.full((1), inputs[input_pos]))[1]
+                inputs = np.insert(inputs, 0, 1)
+            else:
+                inputs = self.__layers[layer_pos].feed_forward(inputs)
         return inputs[1:]
