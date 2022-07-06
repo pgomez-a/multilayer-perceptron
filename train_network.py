@@ -70,7 +70,7 @@ def save_weights(multilayer):
 
 if __name__ == '__main__':
     train, test = read_dataset()
-    topology = (10, 10, 1)
+    topology = (10, 10, 2)
     hidden_weights = get_hidden_weights(topology, input_len = train.shape[1] - 1, value = 0.0)
     multilayer = MultilayerPerceptron(train.shape[1] - 1, hidden_weights)
     save_weights(multilayer)
