@@ -43,6 +43,18 @@ class MultilayerPerceptron(object):
                 msg += "\t\tPerceptron has {} dendrites with weights: {}\n".format(neuron.get_dendrites(), neuron.get_weights())
         return msg
 
+    @staticmethod
+    def __softmax(vector):
+        """
+        Applies the softmax function to the given vector.
+        """
+        denominator = 0
+        for scalar in vector:
+            denominator += np.exp(scalar)
+        for pos in range(vector.size):
+            vector[pos] = np.exp(vector[pos]) / denominator
+        return vector
+
     def get_size(self):
         """
         Returns the number of layers of the multilayer-perceptron model.
@@ -66,4 +78,4 @@ class MultilayerPerceptron(object):
                 inputs = np.insert(inputs, 0, 1)
             else:
                 inputs = self.__layers[layer_pos].feed_forward(inputs)
-        return inputs[1:]
+        return self.__softmax(inputs[1:])

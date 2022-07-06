@@ -41,17 +41,6 @@ def get_weights():
         sys.exit(1)
     return weights
 
-def softmax(vector):
-    """
-    Applies the softmax function to the given vector.
-    """
-    denominator = 0
-    for scalar in vector:
-        denominator += np.exp(scalar)
-    for pos in range(vector.size):
-        vector[pos] = np.exp(vector[pos]) / denominator
-    return vector
-
 def predict(X, multilayer, true_val, neg_val):
     """
     Performs a prediction for each of the given inputs.
@@ -61,7 +50,6 @@ def predict(X, multilayer, true_val, neg_val):
     Y_hat_str = np.zeros(X.shape[0], dtype = object)
     for pos in range(X.shape[0]):
         val = multilayer.feed_forward(X[pos])
-        val = softmax(val)
         Y_hat_num[pos] = val[0] if val[0] >= val[1] else val[1]
         Y_hat_str[pos] = true_val if val[0] >= val[1] else neg_val
     return Y_hat_num, Y_hat_str
