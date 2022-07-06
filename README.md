@@ -24,6 +24,8 @@ To carry out this project, we are going to train an **[artificial neural network
   - Model Training
   - Model Evaluation
 
+
+### How to use it?
 The **prediction program** will load the weights learned in the previous phase, perform a prediction on a given set (which will also be loaded), then evaluate it using the **[binary cross-entropy error function](https://en.wikipedia.org/wiki/Cross_entropy#Cross-entropy_error_function_and_logistic_regression)**:
 
     python evaluate_network.py
