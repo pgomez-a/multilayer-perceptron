@@ -27,6 +27,23 @@ class LayerPerceptron(object):
             msg += "\tPerceptron has {} dendrites with weights: {}\n".format(neuron.get_dendrites(), neuron.get_weights())
         return msg
 
+    def set_weights(self, weights):
+        """
+        Sets the weights of the neurons of the layer.
+        """
+        for neuron in range(self.__neurons):
+            self.__perceptrons[neuron].set_weights(weights[neuron])
+        return
+
+    def get_weights(self):
+        """
+        Returns the weights of the neurons of the layer.
+        """
+        weights = np.zeros((self.__neurons, self.__dendrites))
+        for neuron in range(self.__neurons):
+            weights[neuron] = self.__perceptrons[neuron].get_weights()
+        return weights
+
     def get_neurons(self):
         """
         Returns the number of neurons of the layer.

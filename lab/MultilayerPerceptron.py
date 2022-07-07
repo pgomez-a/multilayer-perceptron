@@ -55,6 +55,15 @@ class MultilayerPerceptron(object):
             vector[pos] = np.exp(vector[pos]) / denominator
         return vector
 
+    def get_weights(self):
+        """
+        Returns the weights of the layers of the multilayer-perceptron model.
+        """
+        weights = list()
+        for layer in range(self.__size):
+            weights.append(self.__layers[layer].get_weights())
+        return weights
+
     def get_size(self):
         """
         Returns the number of layers of the multilayer-perceptron model.
@@ -67,9 +76,9 @@ class MultilayerPerceptron(object):
         """
         return self.__layers
 
-    def feed_forward(self, inputs):
+    def forward_propagation(self, inputs):
         """
-        Performs a feed forward operation with the stored weights.
+        Performs forward propagation with the stored weights.
         """
         for layer_pos in range(self.__size):
             if layer_pos == 0:
@@ -79,3 +88,76 @@ class MultilayerPerceptron(object):
             else:
                 inputs = self.__layers[layer_pos].feed_forward(inputs)
         return self.__softmax(inputs[1:])
+
+    def __create_gradient_record(self):
+        """
+        Creates the gradient record needed to perform back propagation.
+        """
+        gradient_record = list()
+        weights = self.get_weights()[1:]
+        for row in range(len(weights)):
+            gradient_record.append(np.zeros(weights[row].shape))
+        return gradient_record
+
+    def __get_activation_values(self, inputs):
+        """
+        Performs forward propagation for each of the layers of the model.
+        """
+        activation_values = list()
+        for layer_pos in range(self.__size):
+            if layer_pos == 0:
+                for input_pos in range(inputs.size):
+                    inputs[input_pos] = self.__layers[layer_pos].feed_forward(np.full((1), inputs[input_pos]))[1]
+                inputs = np.insert(inputs, 0, 1)
+            elif layer_pos == self.__size - 1:
+                inputs = self.__layers[layer_pos].feed_forward(inputs)[1:]
+            else:
+                inputs = self.__layers[layer_pos].feed_forward(inputs)
+            activation_values.append(inputs)
+        return activation_values
+
+    def __get_error_values(self, activation_values, Y):
+        """
+        Computes the error value for each of the neurons of the model.
+        """
+        error_values = list()
+        for layer_pos in range(self.__size, 1, -1):
+            if layer_pos == self.__size:
+                error = activation_values[layer_pos - 1] - Y
+                error_values.append(error)
+            else:
+                if layer_pos == self.__size - 1:
+                    error = np.matmul(self.__layers[layer_pos].get_weights().transpose(), error)
+                else:
+                    error = np.matmul(self.__layers[layer_pos].get_weights().transpose(), error[1:])
+                error *= activation_values[layer_pos - 1]
+                error *= (1 - activation_values[layer_pos - 1])
+                error_values.append(error)
+        error_values.append(np.zeros(activation_values[0].size))
+        error_values.reverse()
+        return error_values
+
+    def train(self, X, Y, alpha = 0.1, max_iter = 100):
+        """
+        Trains the multilayer-perceptron model.
+        """
+        for i in range(max_iter):
+            gradient_record = self.__create_gradient_record()
+            for row in range(X.shape[0]):
+                activation_values = self.__get_activation_values(X[row])
+                error_values = self.__get_error_values(activation_values, Y[row])
+                gradient = list()
+                for pos in range(len(activation_values) - 1):
+                    cost = np.matmul(error_values[pos + 1].reshape((-1, 1)), activation_values[pos].reshape((-1, 1)).transpose())
+                    if pos != self.__size - 2:
+                        cost = cost[1:]
+                    gradient.append(cost)
+                for pos in range(len(gradient_record)):
+                    gradient_record[pos] += gradient[pos]
+            weights = self.get_weights()
+            for pos in range(len(gradient_record)):
+                gradient_record[pos] /= X.shape[0]
+                weights[pos + 1] -= alpha * gradient_record[pos]
+                self.__layers[pos + 1].set_weights(weights[pos + 1])
+            print("epoch {}/{} -".format(i + 1, max_iter))
+        return

@@ -31,7 +31,7 @@ def read_dataset():
         sys.exit(1)
     return dataset_train, dataset_test
 
-def get_hidden_weights(topology, input_len, value):
+def get_hidden_weights(topology, input_len):
     """
     Creates the weights that will be given to the multilayer-perceptron.
     """
@@ -41,17 +41,31 @@ def get_hidden_weights(topology, input_len, value):
     if not type(input_len) == int or input_len <= 0:
         print("\033[1m\033[91mError: get_weights. input_len must be a positive int.\n\033[0m")
         sys.exit(1)
-    if not type(value) == int and not type(value) == float:
-        print("\033[1m\033[91mError: get_weights. value must be numerical.\n\033[0m")
-        sys.exit(1)
     weights = list()
     for pos in range(len(topology)):
         if pos == 0:
-            layer = np.full((topology[pos], input_len + 1), value, dtype = object)
+            layer = np.random.rand(topology[pos], input_len + 1)
         else:
-            layer = np.full((topology[pos], topology[pos - 1] + 1), value, dtype = object)
-        weights.append(layer)
+            layer = np.random.rand(topology[pos], topology[pos - 1] + 1)
+        weights.append(layer * 10)
     return weights
+
+def give_train_format(train, true_val, neg_val):
+    """
+    Formats the values that will be used to train the multilayer.
+    """
+    X = np.array(train.iloc[:,1:])
+    Y = np.array(train.iloc[:,0])
+    Y[Y == true_val] = 1.0
+    Y[Y == neg_val] = 0.0
+    Y_set = np.zeros((Y.shape[0], 2))
+    for row in range(Y_set.shape[0]):
+        if Y[row] == 1.0:
+            Y_set[row][0] = 1.0
+        else:
+            Y_set[row][1] = 1.0
+    return X, Y_set
+
 
 def save_weights(multilayer):
     """
@@ -71,7 +85,9 @@ def save_weights(multilayer):
 if __name__ == '__main__':
     train, test = read_dataset()
     topology = (10, 10, 2)
-    hidden_weights = get_hidden_weights(topology, input_len = train.shape[1] - 1, value = 0.0)
+    hidden_weights = get_hidden_weights(topology, input_len = train.shape[1] - 1)
     multilayer = MultilayerPerceptron(train.shape[1] - 1, hidden_weights)
+    X_train, Y_train = give_train_format(train, true_val = 'M', neg_val = 'B')
+    multilayer.train(X_train, Y_train, alpha = 0.01, max_iter = 70)
     save_weights(multilayer)
     sys.exit(0)
