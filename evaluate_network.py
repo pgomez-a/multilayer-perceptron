@@ -49,7 +49,7 @@ def predict(X, multilayer, true_val, neg_val):
     Y_hat_num = np.zeros(X.shape[0], dtype = float)
     Y_hat_str = np.zeros(X.shape[0], dtype = object)
     for pos in range(X.shape[0]):
-        val = multilayer.feed_forward(X[pos])
+        val = multilayer.forward_propagation(X[pos])
         Y_hat_num[pos] = val[0] if val[0] >= val[1] else val[1]
         Y_hat_str[pos] = true_val if val[0] >= val[1] else neg_val
     return Y_hat_num, Y_hat_str
