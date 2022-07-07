@@ -137,27 +137,25 @@ class MultilayerPerceptron(object):
         error_values.reverse()
         return error_values
 
-    def train(self, X, Y, alpha = 0.1, max_iter = 100):
+    def back_propagation(self, X, Y, alpha = 0.1):
         """
-        Trains the multilayer-perceptron model.
+        Performs back propagation with the stored weights.
         """
-        for i in range(max_iter):
-            gradient_record = self.__create_gradient_record()
-            for row in range(X.shape[0]):
-                activation_values = self.__get_activation_values(X[row])
-                error_values = self.__get_error_values(activation_values, Y[row])
-                gradient = list()
-                for pos in range(len(activation_values) - 1):
-                    cost = np.matmul(error_values[pos + 1].reshape((-1, 1)), activation_values[pos].reshape((-1, 1)).transpose())
-                    if pos != self.__size - 2:
-                        cost = cost[1:]
-                    gradient.append(cost)
-                for pos in range(len(gradient_record)):
-                    gradient_record[pos] += gradient[pos]
-            weights = self.get_weights()
+        gradient_record = self.__create_gradient_record()
+        for row in range(X.shape[0]):
+            activation_values = self.__get_activation_values(X[row])
+            error_values = self.__get_error_values(activation_values, Y[row])
+            gradient = list()
+            for pos in range(len(activation_values) - 1):
+                cost = np.matmul(error_values[pos + 1].reshape((-1, 1)), activation_values[pos].reshape((-1, 1)).transpose())
+                if pos != self.__size - 2:
+                    cost = cost[1:]
+                gradient.append(cost)
             for pos in range(len(gradient_record)):
-                gradient_record[pos] /= X.shape[0]
-                weights[pos + 1] -= alpha * gradient_record[pos]
-                self.__layers[pos + 1].set_weights(weights[pos + 1])
-            print("epoch {}/{} -".format(i + 1, max_iter))
+                gradient_record[pos] += gradient[pos]
+        weights = self.get_weights()
+        for pos in range(len(gradient_record)):
+            gradient_record[pos] /= X.shape[0]
+            weights[pos + 1] -= alpha * gradient_record[pos]
+            self.__layers[pos + 1].set_weights(weights[pos + 1])
         return

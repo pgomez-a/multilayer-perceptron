@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import sys
@@ -50,7 +51,7 @@ def get_hidden_weights(topology, input_len):
         weights.append(layer * 10)
     return weights
 
-def give_train_format(train, true_val, neg_val):
+def give_backp_format(train, true_val, neg_val):
     """
     Formats the values that will be used to train the multilayer.
     """
@@ -66,6 +67,52 @@ def give_train_format(train, true_val, neg_val):
             Y_set[row][1] = 1.0
     return X, Y_set
 
+def predict(X, multilayer, true_val, neg_val):
+    """
+    Performs a prediction for each of the given inputs.
+    """
+    Y_hat = np.zeros(X.shape[0], dtype = float)
+    for pos in range(X.shape[0]):
+        val = multilayer.forward_propagation(X[pos])
+        Y_hat[pos] = val[0] if val[0] >= val[1] else val[1]
+    return Y_hat
+
+def cost(Y, Y_hat, true_val, neg_val):
+    """
+    Performs a binary cross-entropy error function to evaluate the accuracy of the model.
+    """
+    Y[Y == true_val] = 1.0
+    Y[Y == neg_val] = 0.0
+    return -sum(Y * np.log(Y_hat) + (1 - Y) * np.log(1 - Y_hat)) / Y.shape[0]
+
+def train_model(X_train, Y_train, X_test, Y_test, X_backp, Y_backp, alpha, max_iter):
+    """
+    Trains the multilayer-perceptron using backpropagation and gradient descent.
+    """
+    index_list = list()
+    train_cost_list = list()
+    test_cost_list = list()
+    for i in range(max_iter):
+        multilayer.back_propagation(X_backp, Y_backp, alpha)
+        Y_hat_train = predict(X_train, multilayer, true_val = 'M', neg_val = 'B')
+        Y_hat_test = predict(X_test, multilayer, true_val = 'M', neg_val = 'B')
+        train_cost = cost(Y_train, Y_hat_train, true_val = 'M', neg_val = 'B')
+        test_cost = cost(Y_test, Y_hat_test, true_val = 'M', neg_val = 'B')
+        index_list.append(i)
+        train_cost_list.append(train_cost)
+        test_cost_list.append(test_cost)
+        print("epoch {}/{} - loss: {:.4f} - val_loss: {:.4f}".format(i + 1, max_iter, train_cost, test_cost))
+    plt.plot(index_list, train_cost_list, alpha = 0.75, color = "lime", label = "Train Set")
+    plt.plot(index_list, test_cost_list, alpha = 0.75, color = "gold", label = "Test Set")
+    plt.title("Multilayer Perceptron")
+    plt.xlabel("Epochs")
+    plt.ylabel("Cost")
+    plt.xticks(np.arange(0, max_iter, 5))
+    plt.yticks(np.arange(0, 1, 0.1))
+    plt.legend()
+    plt.grid()
+    plt.show()
+    return
 
 def save_weights(multilayer):
     """
@@ -79,7 +126,7 @@ def save_weights(multilayer):
                 for weight in perceptron.get_weights():
                     f.write(str(weight) + ' ')
                 f.write('\n')
-    print("\033[1mDone! weights.txt file has been created and saved.\n\033[0m")
+    print("\033[1m\nDone! weights.txt file has been created and saved.\n\033[0m")
     return
 
 if __name__ == '__main__':
@@ -87,7 +134,11 @@ if __name__ == '__main__':
     topology = (10, 10, 2)
     hidden_weights = get_hidden_weights(topology, input_len = train.shape[1] - 1)
     multilayer = MultilayerPerceptron(train.shape[1] - 1, hidden_weights)
-    X_train, Y_train = give_train_format(train, true_val = 'M', neg_val = 'B')
-    multilayer.train(X_train, Y_train, alpha = 0.01, max_iter = 70)
+    Y_train = train.iloc[:, 0].to_numpy()
+    X_train = train.iloc[:, 1:].to_numpy()
+    Y_test = test.iloc[:, 0].to_numpy()
+    X_test = test.iloc[:, 1:].to_numpy()
+    X_backp, Y_backp = give_backp_format(train, true_val = 'M', neg_val = 'B')
+    train_model(X_train, Y_train, X_test, Y_test, X_backp, Y_backp, alpha = 0.5, max_iter = 70)
     save_weights(multilayer)
     sys.exit(0)
