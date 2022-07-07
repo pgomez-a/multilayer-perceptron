@@ -110,7 +110,7 @@ class MultilayerPerceptron(object):
                     inputs[input_pos] = self.__layers[layer_pos].feed_forward(np.full((1), inputs[input_pos]))[1]
                 inputs = np.insert(inputs, 0, 1)
             elif layer_pos == self.__size - 1:
-                inputs = self.__layers[layer_pos].feed_forward(inputs)[1:]
+                inputs = self.__softmax(self.__layers[layer_pos].feed_forward(inputs)[1:])
             else:
                 inputs = self.__layers[layer_pos].feed_forward(inputs)
             activation_values.append(inputs)
