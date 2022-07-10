@@ -52,20 +52,17 @@ def get_hidden_weights(topology, input_len):
         weights.append(layer)
     return weights
 
-def give_backp_format(data, true_val, neg_val):
+def give_backp_format(data, opt_outputs):
     """
     Formats the values that will be used to train the multilayer.
     """
     X = np.copy(data.iloc[:,1:].to_numpy())
     Y = np.copy(data.iloc[:,0].to_numpy())
-    Y[Y == true_val] = 1.0
-    Y[Y == neg_val] = 0.0
-    Y_format = np.zeros((Y.shape[0], 2))
+    Y_format = np.zeros((Y.shape[0], opt_outputs.size))
     for row in range(Y.shape[0]):
-        if Y[row] == 1.0:
-            Y_format[row][0] = 1.0
-        else:
-            Y_format[row][1] = 1.0
+        index = np.where(opt_outputs == Y[row])[0]
+        if index.size:
+            Y_format[row][index[0]] = 1.0
     return X, Y_format
 
 def normalize_values(X_train, X_test):
@@ -100,25 +97,26 @@ def softmax(vector):
         vector[pos] = np.exp(vector[pos]) / denominator
     return vector
 
-def predict(X, multilayer):
+def predict(X, multilayer, opt_outputs):
     """
     Performs a prediction for each of the given inputs.
     """
-    Y_hat = np.zeros((X.shape[0], 2), dtype = float)
+    Y_hat = np.zeros((X.shape[0], opt_outputs.size), dtype = float)
     for pos in range(X.shape[0]):
         val = multilayer.forward_propagation(X[pos])
         Y_hat[pos] = val
     return Y_hat
 
-def cost(Y, Y_hat):
+def cost(Y, Y_hat, opt_outputs):
     """
     Performs a binary cross-entropy error function to evaluate the accuracy of the model.
     """
     Y = np.copy(Y.transpose())
     Y_hat = np.copy(Y_hat.transpose())
-    label_one_cost =  -sum(Y[0] * np.log(Y_hat[0]) + (1 - Y[0]) * np.log(1 - Y_hat[0])) / Y.shape[1]
-    label_two_cost =  -sum(Y[1] * np.log(Y_hat[1]) + (1 - Y[1]) * np.log(1 - Y_hat[1])) / Y.shape[1]
-    return (label_one_cost + label_two_cost) / 2
+    cost = 0.0
+    for option in range(opt_outputs.size):
+        cost +=  -sum(Y[option] * np.log(Y_hat[option]) + (1 - Y[option]) * np.log(1 - Y_hat[option])) / Y.shape[1]
+    return cost / opt_outputs.size
 
 def display_graph(X_axis, train_cost, test_cost, num_iters):
     """
@@ -135,7 +133,7 @@ def display_graph(X_axis, train_cost, test_cost, num_iters):
     plt.grid()
     plt.show()
 
-def train_model(X_train, Y_train, X_test, Y_test, alpha, max_iter):
+def train_model(opt_outputs, X_train, Y_train, X_test, Y_test, alpha, max_iter):
     """
     Trains the multilayer-perceptron using backpropagation and gradient descent.
     """
@@ -145,10 +143,10 @@ def train_model(X_train, Y_train, X_test, Y_test, alpha, max_iter):
     num_iters = 0
     for i in range(max_iter):
         multilayer.back_propagation(X_train, Y_train, alpha)
-        Y_hat_train = predict(X_train, multilayer)
-        Y_hat_test = predict(X_test, multilayer)
-        train_cost = cost(Y_train, Y_hat_train)
-        test_cost = cost(Y_test, Y_hat_test)
+        Y_hat_train = predict(X_train, multilayer, opt_outputs)
+        Y_hat_test = predict(X_test, multilayer, opt_outputs)
+        train_cost = cost(Y_train, Y_hat_train, opt_outputs)
+        test_cost = cost(Y_test, Y_hat_test, opt_outputs)
         index_list.append(i)
         train_cost_list.append(train_cost)
         test_cost_list.append(test_cost)
@@ -183,12 +181,13 @@ def save_weights(multilayer, mean_list, max_list, min_list):
 
 if __name__ == '__main__':
     train, test = read_dataset()
-    topology = (10, 5, 2)
+    opt_outputs = train.iloc[:, 0].unique()
+    topology = (10, 5, opt_outputs.size)
     hidden_weights = get_hidden_weights(topology, input_len = train.shape[1] - 1)
     multilayer = MultilayerPerceptron(train.shape[1] - 1, hidden_weights)
-    X_train, Y_train = give_backp_format(train, true_val = 'M', neg_val = 'B')
-    X_test, Y_test = give_backp_format(test, true_val = 'M', neg_val = 'B')
+    X_train, Y_train = give_backp_format(train, opt_outputs)
+    X_test, Y_test = give_backp_format(test, opt_outputs)
     mean_list, max_list, min_list = normalize_values(X_train, X_test)
-    train_model(X_train, Y_train, X_test, Y_test, alpha = 0.2, max_iter = 70)
+    train_model(opt_outputs, X_train, Y_train, X_test, Y_test, alpha = 0.2, max_iter = 70)
     save_weights(multilayer, mean_list, max_list, min_list)
     sys.exit(0)
