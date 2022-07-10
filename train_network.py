@@ -151,6 +151,8 @@ def train_model(opt_outputs, Y_train_str, Y_test_str, X_train, Y_train, X_test, 
     train_acc_list = list()
     test_cost_list = list()
     test_acc_list = list()
+    with open("historic.txt", "w") as f:
+        f.write("An historic of the metric obtained during training:\n")
     for i in range(max_iter):
         multilayer.back_propagation(X_train, Y_train, alpha)
         Y_hat_train_num, Y_hat_train_str = predict(X_train, multilayer, opt_outputs)
@@ -164,8 +166,9 @@ def train_model(opt_outputs, Y_train_str, Y_test_str, X_train, Y_train, X_test, 
         train_acc_list.append(train_acc)
         test_cost_list.append(test_cost)
         test_acc_list.append(test_acc)
-        print("epoch {}/{} - loss: {:.4f} - val_loss: {:.4f}".format(i + 1, max_iter, train_cost, test_cost), end = "")
-        print(" - acc: {:.4f}% - val_acc: {:.4f}%".format(train_acc * 100, test_acc * 100))
+        print("epoch {}/{} - loss: {:.4f} - val_loss: {:.4f} - acc: {:.4f}% - val_acc: {:.4f}%".format(i + 1, max_iter, train_cost, test_cost, train_acc * 100, test_acc * 100))
+        with open("historic.txt", "a") as f:
+            f.write("epoch {}/{} - loss: {:.4f} - val_loss: {:.4f} - acc: {:.4f}% - val_acc: {:.4f}%\n".format(i + 1, max_iter, train_cost, test_cost, train_acc * 100, test_acc * 100))
     display_graph(index_list, train_cost_list, train_acc_list, test_cost_list, test_acc_list)
     return
 
