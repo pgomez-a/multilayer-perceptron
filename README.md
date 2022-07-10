@@ -28,12 +28,12 @@ To carry out this project, we are going to train an **[artificial neural network
 ### How to use it?
 The **training program** will use **backpropagation** and **gradient descent** to learn on the training dataset and will save the model (network topology and weights) at the end of its execution:
 
-    python train_network.py
+    python train_network.py <dataset> <split_proportion>
 
 <img width="1474" alt="learning_curve" src="https://user-images.githubusercontent.com/74931024/178154668-4e4b6dbb-160e-4bcc-a2e1-d0fc0b4c9900.png">
 
 The **prediction program** will load the weights learned in the previous phase, perform a prediction on a given set (which will also be loaded), then evaluate it using the **[binary cross-entropy error function](https://en.wikipedia.org/wiki/Cross_entropy#Cross-entropy_error_function_and_logistic_regression)**:
 
-    python evaluate_network.py
+    python evaluate_network.py <dataset> <weights_file>
 
 <img width="870" alt="evaluate_network" src="https://user-images.githubusercontent.com/74931024/178147374-230efff9-5dfc-4c3a-b019-1f24b59b8d4a.png">
