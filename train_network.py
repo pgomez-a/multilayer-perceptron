@@ -87,7 +87,7 @@ def normalize_values(X_train, X_test):
         X_test[feature] = (X_test[feature] - mean_list[feature]) / (max_list[feature] - min_list[feature])
     X_train = X_train.transpose()
     X_test = X_test.transpose()
-    return
+    return mean_list, max_list, min_list
 
 def softmax(vector):
     """
@@ -157,18 +157,27 @@ def train_model(X_train, Y_train, X_test, Y_test, alpha, max_iter):
     display_graph(index_list, train_cost_list, test_cost_list, num_iters)
     return
 
-def save_weights(multilayer):
+def save_weights(multilayer, mean_list, max_list, min_list):
     """
     Save the weights of the multilayer-perceptron model to a csv file.
     """
     with open('weights.txt', 'w') as f:
-        f.write(str(multilayer.get_size() - 1) + '\n')
-        for layer in multilayer.get_layers()[1:]:
+        f.write(str(multilayer.get_size()) + '\n')
+        for layer in multilayer.get_layers():
             f.write(str(layer.get_neurons()) + ' ' + str(layer.get_dendrites()) + '\n')
             for perceptron in layer.get_perceptrons():
                 for weight in perceptron.get_weights():
                     f.write(str(weight) + ' ')
                 f.write('\n')
+        f.write("Mean: ")
+        for val in mean_list:
+            f.write(str(val) + ' ')
+        f.write("\nMax: ")
+        for val in max_list:
+            f.write(str(val) + ' ')
+        f.write("\nMin: ")
+        for val in min_list:
+            f.write(str(val) + ' ')
     print("\033[1m\nDone! weights.txt file has been created and saved.\n\033[0m")
     return
 
@@ -179,7 +188,7 @@ if __name__ == '__main__':
     multilayer = MultilayerPerceptron(train.shape[1] - 1, hidden_weights)
     X_train, Y_train = give_backp_format(train, true_val = 'M', neg_val = 'B')
     X_test, Y_test = give_backp_format(test, true_val = 'M', neg_val = 'B')
-    normalize_values(X_train, X_test)
+    mean_list, max_list, min_list = normalize_values(X_train, X_test)
     train_model(X_train, Y_train, X_test, Y_test, alpha = 0.2, max_iter = 70)
-    save_weights(multilayer)
+    save_weights(multilayer, mean_list, max_list, min_list)
     sys.exit(0)
