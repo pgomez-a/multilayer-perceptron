@@ -16,15 +16,14 @@ class MultilayerPerceptron(object):
         for elem in weights:
             if not type(elem) == np.ndarray or elem.size == 0 or elem.ndim != 2:
                 raise Exception("weights must be a non-empty numpy ndarray of dimension 3.")
-        self.__size = 1 + len(weights)
+        self.__size = len(weights)
         self.__layers = np.zeros(self.__size, dtype = object)
         for pos in range(self.__size):
-            if pos == 0:
-                self.__layers[pos] = LayerPerceptron(np.ones((input_len, 1)))
-            else:
-                self.__layers[pos] = LayerPerceptron(weights[pos - 1])
-                if self.__layers[pos].get_dendrites() != self.__layers[pos - 1].get_neurons() + 1:
-                    raise Exception("The dendrites of a neuron must be the same as the number of neurons of the previous layer.")
+            self.__layers[pos] = LayerPerceptron(weights[pos])
+            if pos == 0 and self.__layers[pos].get_dendrites() != input_len:
+                raise Exception("The dendrites of a neuron must be the same as the number of neurons of the previous layer.")
+            elif pos != 0 and self.__layers[pos].get_dendrites() != self.__layers[pos - 1].get_neurons() + 1:
+                raise Exception("The dendrites of a neuron must be the same as the number of neurons of the previous layer.")
         return
 
     def __str__(self):
@@ -34,11 +33,7 @@ class MultilayerPerceptron(object):
         msg = "Multilayer Perceptron has {} layers where:\n".format(self.__size)
         pos = 0
         for layer in self.__layers:
-            if pos == 0:
-                msg += "\tInput Layer Perceptron has {} neurons where:\n".format(layer.get_neurons())
-                pos += 1
-            else:
-                msg += "\tHidden Layer Perceptron has {} neurons where:\n".format(layer.get_neurons())
+            msg += "\tHidden Layer Perceptron has {} neurons where:\n".format(layer.get_neurons())
             for neuron in layer.get_perceptrons():
                 msg += "\t\tPerceptron has {} dendrites with weights: {}\n".format(neuron.get_dendrites(), neuron.get_weights())
         return msg
@@ -80,13 +75,9 @@ class MultilayerPerceptron(object):
         """
         Performs forward propagation with the stored weights.
         """
+        inputs = np.copy(inputs)
         for layer_pos in range(self.__size):
-            if layer_pos == 0:
-                for input_pos in range(inputs.size):
-                    inputs[input_pos] = self.__layers[layer_pos].feed_forward(np.full((1), inputs[input_pos]))[1]
-                inputs = np.insert(inputs, 0, 1)
-            else:
-                inputs = self.__layers[layer_pos].feed_forward(inputs)
+            inputs = self.__layers[layer_pos].feed_forward(inputs)
         return inputs[1:]
 
     def __create_gradient_record(self):
@@ -103,13 +94,11 @@ class MultilayerPerceptron(object):
         """
         Performs forward propagation for each of the layers of the model.
         """
+        inputs = np.copy(inputs)
         activation_values = list()
+        activation_values.append(inputs)
         for layer_pos in range(self.__size):
-            if layer_pos == 0:
-                for input_pos in range(inputs.size):
-                    inputs[input_pos] = self.__layers[layer_pos].feed_forward(np.full((1), inputs[input_pos]))[1]
-                inputs = np.insert(inputs, 0, 1)
-            elif layer_pos == self.__size - 1:
+            if layer_pos == self.__size - 1:
                 inputs = self.__layers[layer_pos].feed_forward(inputs)[1:]
             else:
                 inputs = self.__layers[layer_pos].feed_forward(inputs)
@@ -122,10 +111,10 @@ class MultilayerPerceptron(object):
         """
         for row in range(X.shape[0]):
             activation_values = self.__get_activation_values(X[row])
-            for pos in range(self.__size, 1, -1):
+            for pos in range(self.__size, 0, -1):
                 weights = self.__layers[pos - 1].get_weights()
                 deltas = np.zeros(self.__layers[pos - 1].get_neurons())
-                outputs = activation_values[pos - 1]
+                outputs = activation_values[pos]
                 if pos == self.__size:
                     deltas = outputs * (1 - outputs) * (Y[row] - outputs)
                 else:
@@ -133,9 +122,9 @@ class MultilayerPerceptron(object):
                     deltas = (outputs * (1 - outputs) * derivatives)[1:]
                 for neuron in range(weights.shape[0]):
                     for weight in range(weights[neuron].size):
-                        gradient = alpha * deltas[neuron] * activation_values[pos - 2][weight]
+                        gradient = alpha * deltas[neuron] * activation_values[pos - 1][weight]
                         weights[neuron][weight] += gradient
                 self.__layers[pos - 1].set_weights(weights)
-                copy_weights = weights
-                copy_deltas = deltas.reshape((1, -1))
+                copy_weights = np.copy(weights)
+                copy_deltas = np.copy(deltas.reshape((1, -1)))
         return
