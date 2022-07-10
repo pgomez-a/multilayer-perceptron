@@ -1,3 +1,4 @@
+from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -101,11 +102,13 @@ def predict(X, multilayer, opt_outputs):
     """
     Performs a prediction for each of the given inputs.
     """
-    Y_hat = np.zeros((X.shape[0], opt_outputs.size), dtype = float)
+    Y_hat_num = np.zeros((X.shape[0], opt_outputs.size), dtype = float)
+    Y_hat_str = np.zeros((X.shape[0]), dtype = object)
     for pos in range(X.shape[0]):
         val = multilayer.forward_propagation(X[pos])
-        Y_hat[pos] = val
-    return Y_hat
+        Y_hat_num[pos] = val
+        Y_hat_str[pos] = opt_outputs[np.where(val == max(val))[0][0]]
+    return Y_hat_num, Y_hat_str
 
 def cost(Y, Y_hat, opt_outputs):
     """
@@ -118,41 +121,52 @@ def cost(Y, Y_hat, opt_outputs):
         cost +=  -sum(Y[option] * np.log(Y_hat[option]) + (1 - Y[option]) * np.log(1 - Y_hat[option])) / Y.shape[1]
     return cost / opt_outputs.size
 
-def display_graph(X_axis, train_cost, test_cost, num_iters):
+def display_graph(X_axis, train_cost, train_acc, test_cost, test_acc):
     """
     Displays a graph of the cost showing the learning curve of the algorithm.
     """
-    plt.plot(X_axis, train_cost, alpha = 0.75, color = "lime", label = "Train Set")
-    plt.plot(X_axis, test_cost, alpha = 0.75, color = "gold", label = "Test Set")
-    plt.title("Multilayer Perceptron")
-    plt.xlabel("Epochs")
-    plt.ylabel("Cost")
-    plt.xticks(np.arange(0, num_iters + 1, 5))
-    plt.yticks(np.arange(0, 1, 0.25))
-    plt.legend()
-    plt.grid()
+    fig, axis = plt.subplots(1, 2)
+    axis[0].plot(X_axis, train_cost, alpha = 0.75, linewidth = 2, color = "darkred", label = "Train Cost")
+    axis[0].plot(X_axis, test_cost, alpha = 0.75, linewidth = 2, color = "salmon", label = "Test Cost")
+    axis[0].set_xlabel("Epochs")
+    axis[0].set_ylabel("Cost")
+    axis[0].set_title("Train cost: {:.4f}          Test cost: {:.4f}".format(train_cost[-1], test_cost[-1]))
+    axis[0].legend()
+    axis[0].grid()
+    axis[1].plot(X_axis, train_acc, alpha = 0.75, linewidth = 2, color = "darkcyan", label = "Train Accuracy")
+    axis[1].plot(X_axis, test_acc, alpha = 0.75, linewidth = 2, color = "skyblue", label = "Test Accuracy")
+    axis[1].set_xlabel("Epochs")
+    axis[1].set_ylabel("Accuracy")
+    axis[1].set_title("Train accuracy: {:.4f}%          Test accuracy: {:.4f}%".format(train_acc[-1] * 100, test_acc[-1] * 100))
+    axis[1].legend()
+    axis[1].grid()
     plt.show()
 
-def train_model(opt_outputs, X_train, Y_train, X_test, Y_test, alpha, max_iter):
+def train_model(opt_outputs, Y_train_str, Y_test_str, X_train, Y_train, X_test, Y_test, alpha, max_iter):
     """
     Trains the multilayer-perceptron using backpropagation and gradient descent.
     """
     index_list = list()
     train_cost_list = list()
+    train_acc_list = list()
     test_cost_list = list()
-    num_iters = 0
+    test_acc_list = list()
     for i in range(max_iter):
         multilayer.back_propagation(X_train, Y_train, alpha)
-        Y_hat_train = predict(X_train, multilayer, opt_outputs)
-        Y_hat_test = predict(X_test, multilayer, opt_outputs)
-        train_cost = cost(Y_train, Y_hat_train, opt_outputs)
-        test_cost = cost(Y_test, Y_hat_test, opt_outputs)
+        Y_hat_train_num, Y_hat_train_str = predict(X_train, multilayer, opt_outputs)
+        Y_hat_test_num, Y_hat_test_str = predict(X_test, multilayer, opt_outputs)
+        train_cost = cost(Y_train, Y_hat_train_num, opt_outputs)
+        test_cost = cost(Y_test, Y_hat_test_num, opt_outputs)
+        train_acc = accuracy_score(Y_train_str, Y_hat_train_str)
+        test_acc = accuracy_score(Y_test_str, Y_hat_test_str)
         index_list.append(i)
         train_cost_list.append(train_cost)
+        train_acc_list.append(train_acc)
         test_cost_list.append(test_cost)
-        print("epoch {}/{} - loss: {:.4f} - val_loss: {:.4f}".format(i + 1, max_iter, train_cost, test_cost))
-        num_iters += 1
-    display_graph(index_list, train_cost_list, test_cost_list, num_iters)
+        test_acc_list.append(test_acc)
+        print("epoch {}/{} - loss: {:.4f} - val_loss: {:.4f}".format(i + 1, max_iter, train_cost, test_cost), end = "")
+        print(" - acc: {:.4f}% - val_acc: {:.4f}%".format(train_acc * 100, test_acc * 100))
+    display_graph(index_list, train_cost_list, train_acc_list, test_cost_list, test_acc_list)
     return
 
 def save_weights(multilayer, mean_list, max_list, min_list):
@@ -187,7 +201,9 @@ if __name__ == '__main__':
     multilayer = MultilayerPerceptron(train.shape[1] - 1, hidden_weights)
     X_train, Y_train = give_backp_format(train, opt_outputs)
     X_test, Y_test = give_backp_format(test, opt_outputs)
+    Y_train_str = np.copy(train.iloc[:, 0].to_numpy())
+    Y_test_str = np.copy(test.iloc[:, 0].to_numpy())
     mean_list, max_list, min_list = normalize_values(X_train, X_test)
-    train_model(opt_outputs, X_train, Y_train, X_test, Y_test, alpha = 0.2, max_iter = 70)
+    train_model(opt_outputs, Y_train_str, Y_test_str, X_train, Y_train, X_test, Y_test, alpha = 0.2, max_iter = 70)
     save_weights(multilayer, mean_list, max_list, min_list)
     sys.exit(0)
