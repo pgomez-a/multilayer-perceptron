@@ -29,8 +29,6 @@ To carry out this project, we are going to train an **[artificial neural network
 The **training program** will use **backpropagation** and **gradient descent** to learn on the training dataset and will save the model (network topology and weights) at the end of its execution:
 
     python train_network.py
-    
-<img width="870" alt="train_network" src="https://user-images.githubusercontent.com/74931024/178147403-66e8cfb6-46b3-46e0-89bd-fb58c9ec8360.png">
 
 <img width="1474" alt="learning_curve" src="https://user-images.githubusercontent.com/74931024/178154668-4e4b6dbb-160e-4bcc-a2e1-d0fc0b4c9900.png">
 
