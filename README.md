@@ -30,7 +30,7 @@ The **training program** will use **backpropagation** and **gradient descent** t
 
     python train_network.py <dataset> <split_proportion>
 
-<img width="1474" alt="learning_curve" src="https://user-images.githubusercontent.com/74931024/178154668-4e4b6dbb-160e-4bcc-a2e1-d0fc0b4c9900.png">
+<img width="1496" alt="learing_curve" src="https://user-images.githubusercontent.com/74931024/178284488-e64e9385-6b70-442a-8c33-3c46e5a68ce2.png">
 
 The **prediction program** will load the weights learned in the previous phase, perform a prediction on a given set (which will also be loaded), then evaluate it using the **[binary cross-entropy error function](https://en.wikipedia.org/wiki/Cross_entropy#Cross-entropy_error_function_and_logistic_regression)**:
 
