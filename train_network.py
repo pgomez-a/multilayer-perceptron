@@ -87,17 +87,6 @@ def normalize_values(X_train, X_test):
     X_test = X_test.transpose()
     return mean_list, max_list, min_list
 
-def softmax(vector):
-    """
-    Applies the softmax function to the given vector.
-    """
-    denominator = 0
-    for scalar in vector:
-        denominator += np.exp(scalar)
-    for pos in range(vector.size):
-        vector[pos] = np.exp(vector[pos]) / denominator
-    return vector
-
 def predict(X, multilayer, opt_outputs):
     """
     Performs a prediction for each of the given inputs.
@@ -207,6 +196,6 @@ if __name__ == '__main__':
     Y_train_str = np.copy(train.iloc[:, 0].to_numpy())
     Y_test_str = np.copy(test.iloc[:, 0].to_numpy())
     mean_list, max_list, min_list = normalize_values(X_train, X_test)
-    train_model(opt_outputs, Y_train_str, Y_test_str, X_train, Y_train, X_test, Y_test, alpha = 0.2, max_iter = 70)
+    train_model(opt_outputs, Y_train_str, Y_test_str, X_train, Y_train, X_test, Y_test, alpha = 0.01, max_iter = 70)
     save_weights(multilayer, mean_list, max_list, min_list)
     sys.exit(0)

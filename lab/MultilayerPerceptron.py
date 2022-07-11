@@ -78,7 +78,7 @@ class MultilayerPerceptron(object):
         inputs = np.copy(inputs)
         for layer_pos in range(self.__size):
             inputs = self.__layers[layer_pos].feed_forward(inputs)
-        return inputs[1:]
+        return self.__softmax(inputs[1:])
 
     def __create_gradient_record(self):
         """
@@ -99,7 +99,7 @@ class MultilayerPerceptron(object):
         activation_values.append(inputs)
         for layer_pos in range(self.__size):
             if layer_pos == self.__size - 1:
-                inputs = self.__layers[layer_pos].feed_forward(inputs)[1:]
+                inputs = self.__softmax(self.__layers[layer_pos].feed_forward(inputs)[1:])
             else:
                 inputs = self.__layers[layer_pos].feed_forward(inputs)
             activation_values.append(inputs)
@@ -116,7 +116,7 @@ class MultilayerPerceptron(object):
                 deltas = np.zeros(self.__layers[pos - 1].get_neurons())
                 outputs = activation_values[pos]
                 if pos == self.__size:
-                    deltas = outputs * (1 - outputs) * (Y[row] - outputs)
+                    deltas = Y[row] - outputs
                 else:
                     derivatives = np.matmul(copy_deltas, copy_weights).reshape(-1)
                     deltas = (outputs * (1 - outputs) * derivatives)[1:]
