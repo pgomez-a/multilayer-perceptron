@@ -36,4 +36,4 @@ The **prediction program** will load the weights learned in the previous phase, 
 
     python evaluate_network.py <dataset> <weights_file>
 
-<img width="870" alt="evaluate_network" src="https://user-images.githubusercontent.com/74931024/178147374-230efff9-5dfc-4c3a-b019-1f24b59b8d4a.png">
+<img width="1132" alt="evaluate_network" src="https://user-images.githubusercontent.com/74931024/178285527-8286f043-86eb-4ea6-bd89-6fa96c627a45.png">
